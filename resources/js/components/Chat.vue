@@ -1,7 +1,7 @@
 <template>
     <div class="chatapp">
         <div class="chat" ref="scrollArea">
-            <div class="msg" v-for="msg in messages">
+            <div class="msg" v-for="msg in messages" :key="msg.id">
                 <div class="myself" v-if="msg.user === myself">
                     <span class="user">{{ msg.user }}</span>
                     <span class="created_at">{{ formatDate(msg.created_at) }}</span>
@@ -61,7 +61,7 @@ export default {
     },
     mounted() {
         Echo.channel("chatroom").listen("Message", (e) => {
-            console.log(e)
+            // console.log(e)
             this.messages.push({
                 id: e.id,
                 user: e.user,
@@ -90,9 +90,9 @@ export default {
     padding: 50px 0;
     
     .chat {
-        background-color: rgb(194, 242, 255);
+        background-color: rgb(213, 246, 255);
         width: 500px;
-        height: 400px;
+        height: 500px;
         border-radius: 10px;
         margin-bottom: 15px;
         overflow: auto;
@@ -114,8 +114,10 @@ export default {
                 border-radius: 15px;
             }
             .created_at {
+                display: inline-block;
                 font-size: 0.7rem;
                 margin-right: 5px;
+                transform: translateY(3px);
             }
         }
 
@@ -136,8 +138,10 @@ export default {
                 border-radius: 15px;
             }
             .created_at {
+                display: inline-block;
                 font-size: 0.7rem;
                 margin-left: 5px;
+                transform: translateY(3px);
             }
         }
     }
