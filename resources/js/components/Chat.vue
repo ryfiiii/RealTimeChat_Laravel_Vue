@@ -1,6 +1,6 @@
 <template>
     <div class="chatapp">
-        <div class="chat">
+        <div class="chat" ref="scrollArea">
             <div class="msg" v-for="msg in messages">
                 <div class="myself" v-if="msg.user === myself">
                     <span class="user">{{ msg.user }}</span>
@@ -54,6 +54,9 @@ export default {
             const day = dayjs(date)
             const formattedDate = day.format("HH:mm")
             return formattedDate
+        },
+        scrollToBottom() {
+            this.$refs.scrollArea.scrollTop = this.$refs.scrollArea.scrollHeight
         }
     },
     mounted() {
@@ -67,6 +70,11 @@ export default {
                 updated_at: e.updated_at,
             })
         })
+
+        this.scrollToBottom()
+    },
+    updated() {
+        this.scrollToBottom()
     },
 }
 </script>
@@ -74,7 +82,7 @@ export default {
 <style lang="scss">
 .chatapp {
     width: 600px;
-    background-color: rgb(106, 255, 141);
+    background-color: rgb(116, 235, 118);
     display: flex;
     justify-content: center;
     align-items: center;
