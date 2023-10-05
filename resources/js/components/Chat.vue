@@ -2,13 +2,15 @@
     <div class="chatapp">
         <div class="chat" ref="scrollArea">
             <div class="msg" v-for="msg in messages" :key="msg.id">
-                <div class="myself" v-if="msg.user === myself">
-                    <span class="user">{{ msg.user }}</span>
+                <div class="myself" v-if="msg.user.name === myself">
+                    <span class="user">{{ msg.user.name }}</span>
                     <span class="created_at">{{ formatDate(msg.created_at) }}</span>
                     <span class="message">{{ msg.message }}</span>
+                    <!-- <span class="avatar"><img :src="'/storage/avatar/' + msg.user.avatar"></span> -->
                 </div>
                 <div class="others" v-else>
-                    <span class="user">{{ msg.user }}</span>
+                    <span class="user">{{ msg.user.name }}</span>
+                    <span class="avatar"><img :src="'/storage/avatar/' + msg.user.avatar"></span>
                     <span class="message">{{ msg.message }}</span>
                     <span class="created_at">{{ formatDate(msg.created_at) }}</span>
                 </div>
@@ -42,7 +44,9 @@ export default {
                 return
             }
             try{
-                const res = await axios.post("/home", {message: this.message});
+                const res = await axios.post("/home", {
+                    message: this.message,
+                });
                 // console.log(res.data)
                 this.message = ""
 
@@ -64,10 +68,10 @@ export default {
             // console.log(e)
             this.messages.push({
                 id: e.id,
-                user: e.user,
                 message: e.message,
                 created_at: e.created_at,
                 updated_at: e.updated_at,
+                user: e.user,
             })
         })
 
@@ -142,6 +146,16 @@ export default {
                 font-size: 0.7rem;
                 margin-left: 5px;
                 transform: translateY(3px);
+            }
+            
+            .avatar {
+                img {
+                    width: 42px;
+                    height: 42px;
+                    border-radius: 50%;
+                    transform: translateY(-3px);
+                    margin-right: 5px;
+                }
             }
         }
     }

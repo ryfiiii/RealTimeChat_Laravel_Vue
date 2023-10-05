@@ -11,12 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('chats', function (Blueprint $table) {
-            $table->id();
-            $table->unsignedBigInteger("user_id");
-            $table->string("message");
-            $table->timestamps();
-            $table->foreign("user_id")->references("id")->on("users")->onDelete("cascade");
+        Schema::table('users', function (Blueprint $table) {
+            $table->string("avatar")->after("name");
         });
     }
 
@@ -25,6 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('chats');
+        Schema::table('users', function (Blueprint $table) {
+            $table->dropColumn("avatar");
+        });
     }
 };
