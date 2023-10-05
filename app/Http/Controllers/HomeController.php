@@ -16,20 +16,18 @@ class HomeController extends Controller
 
     public function index()
     {
-        $chats = Chat::orderBy("created_at","asc")->get();
+        $chats = Chat::with("user")->orderBy("created_at","asc")->get();
         return view('home', compact("chats"));
     }
 
     public function post(Request $request)
     {
-        $user = Auth::user()->name;
-
         $chat = new Chat();
-        $chat->user = $user;
+        $chat->user_id = Auth::user()->id;
         $chat->message = $request->message;
         $chat->save();
 
-        broadcast(new Message($chat->id, $chat->user, $chat->message, $chat->created_at, $chat->updated_at));
+        broadcast(new Message($chat->id, $chat->user_id, $chat->message, $chat->created_at, $chat->updated_at));
 
         return response()->json($chat);
     }

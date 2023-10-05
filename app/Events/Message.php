@@ -2,6 +2,7 @@
 
 namespace App\Events;
 
+use App\Models\User;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PresenceChannel;
@@ -15,21 +16,26 @@ class Message implements ShouldBroadcast
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     public $id;
-    public $user;
     public $message;
     public $created_at;
     public $updated_at;
+    public $user;
 
     /**
      * Create a new event instance.
      */
-    public function __construct($id, $user, $message, $created_at, $updated_at)
+    public function __construct($id, $user_id, $message, $created_at, $updated_at)
     {
         $this->id = $id;
-        $this->user = $user;
         $this->message = $message;
         $this->created_at = $created_at;
         $this->updated_at = $updated_at;
+
+        $user = User::find($user_id);
+        $this->user = [
+            "name" => $user->name,
+            "avatar" => $user->avatar,
+        ];
     }
 
     /**
